@@ -1,6 +1,9 @@
 const form = document.querySelector("#contact-form");
 const formStatus = document.querySelector(".form-status");
 const year = document.querySelector("#year");
+const themeToggle = document.querySelector("#theme-toggle");
+const themeToggleIcon = themeToggle.querySelector(".theme-toggle-icon");
+const themeToggleLabel = themeToggle.querySelector(".theme-toggle-label");
 const fields = [
   { input: document.querySelector("#name"), error: document.querySelector("#name-error"), requiredMessage: "이름을 입력해 주세요." },
   { input: document.querySelector("#email"), error: document.querySelector("#email-error"), requiredMessage: "이메일을 입력해 주세요." },
@@ -8,6 +11,23 @@ const fields = [
 ];
 
 year.textContent = new Date().getFullYear();
+
+const applyTheme = (theme) => {
+  const isDark = theme === "dark";
+  document.documentElement.dataset.theme = isDark ? "dark" : "light";
+  themeToggle.setAttribute("aria-pressed", String(isDark));
+  themeToggleIcon.textContent = isDark ? "☀" : "☾";
+  themeToggleLabel.textContent = isDark ? "Light" : "Dark";
+};
+
+const savedTheme = localStorage.getItem("portfolio-theme");
+applyTheme(savedTheme === "dark" ? "dark" : "light");
+
+themeToggle.addEventListener("click", () => {
+  const theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  localStorage.setItem("portfolio-theme", theme);
+  applyTheme(theme);
+});
 
 fields.forEach(({ input, error }) => {
   input.addEventListener("input", () => {
